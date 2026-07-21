@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik Penduduk — Desa Ngemplakseneng</title>
+<meta name="description" content="Data statistik penduduk Desa Ngemplakseneng.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+<script>document.documentElement.classList.add('js-ready');</script>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span class="mark">N</span> Ngemplakseneng</a>
+    <nav class="nav-links">
+      <a href="../index.html">Beranda</a>
+      <a href="sejarah.html">Sejarah</a>
+      <a href="visimisi.html">Visi &amp; Misi</a>
+      <a href="pemerintahan.html">Pemerintahan</a>
+      <a href="statistik.html" class="active">Statistik</a>
+      <a href="potensi.html">Potensi Desa</a>
+      <a href="berita.html">Berita</a>
+    </nav>
+    <a href="kontak.html" class="nav-cta">Hubungi Kami</a>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="section page-hero alt-bg">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div class="eyebrow">Data Kependudukan</div>
+      <h2>Statistik Penduduk</h2>
+      <p>Gambaran jumlah dan komposisi penduduk Desa Ngemplakseneng.</p>
+    </div>
+
+    <div class="data-note">
+      &#9888;&#65039; Angka di bawah ini masih <b>data contoh (placeholder)</b>, belum data resmi desa. Ganti dengan data asli di
+      <code>script.js</code> pada bagian <code>DATA_DEMOGRAFI</code>, atau kirimkan datanya ke saya untuk diisikan.
+    </div>
+
+    <div class="stat-grid" data-reveal>
+      <div class="stat-card main">
+        <div class="stat-num" id="stat-total">3.250</div>
+        <div class="stat-lbl">Total Penduduk</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-lk">1.620</div>
+        <div class="stat-lbl">Laki-laki</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-pr">1.630</div>
+        <div class="stat-lbl">Perempuan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-umkm">12</div>
+        <div class="stat-lbl">UMKM Terdaftar</div>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--teks-lembut);margin:-14px 0 32px;">Catatan: angka ini otomatis mengikuti <code>DATA_DEMOGRAFI</code> di <code>script.js</code> begitu dibuka di browser sungguhan.</p>
+
+    <div class="chart-grid" data-reveal>
+      <div class="chart-card">
+        <h3>Laki-laki vs Perempuan</h3>
+        <div class="chart-box"><canvas id="chart-gender"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Kelompok Usia</h3>
+        <div class="chart-box"><canvas id="chart-usia"></canvas></div>
+      </div>
+      <div class="chart-card wide">
+        <h3>Mata Pencaharian</h3>
+        <div class="chart-box"><canvas id="chart-mp"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>Desa Ngemplakseneng</h4>
+        <p style="font-size:.87rem;color:rgba(255,255,255,.6);max-width:320px;">Portal informasi resmi Pemerintah Desa Ngemplakseneng, Kapanewon Manisrenggo, Kabupaten Klaten, Jawa Tengah.</p>
+      </div>
+      <div>
+        <h4>Jelajah</h4>
+        <a href="sejarah.html">Sejarah Desa</a>
+        <a href="visimisi.html">Visi &amp; Misi</a>
+        <a href="pemerintahan.html">Pemerintahan</a>
+        <a href="potensi.html">Potensi Desa</a>
+      </div>
+      <div>
+        <h4>Layanan</h4>
+        <a href="kontak.html">Kontak Kantor Desa</a>
+        <a href="#">Permohonan Informasi (PPID)</a>
+        <a href="#">Pengaduan Warga</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 KKN UPN Veteran Yogyakarta. By Riella Chu. Seluruh hak cipta dilindungi.</span>
+      <span class="mono">Manisrenggo &middot; Klaten &middot; Jawa Tengah</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../script.js" defer></script>
+</body>
+</html>
