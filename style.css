@@ -352,6 +352,15 @@ footer{background:var(--teks);color:rgba(255,255,255,.7);padding:56px 0 26px;}
 .footer-grid h4{font-family:'Sora',sans-serif;color:var(--putih);margin-bottom:14px;font-size:1rem;}
 .footer-grid a{display:block;font-size:.87rem;color:rgba(255,255,255,.6);margin-bottom:9px;}
 .footer-grid a:hover{color:#9fc3e8;}
+.social-links{display:flex;gap:10px;margin-top:20px;}
+.social-links a{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.75);margin:0;transition:.25s ease;
+}
+.social-links a:hover{background:var(--biru);color:var(--putih);}
+.social-links svg{width:18px;height:18px;}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;font-size:.78rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 
 [data-reveal]{opacity:1;transform:none;}
