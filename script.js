@@ -1,13 +1,9 @@
-// =========================================================
-// DATA CONTOH (PLACEHOLDER) — GANTI DENGAN DATA ASLI DESA
-// Semua angka di bawah ini BUKAN data resmi, hanya contoh
-// supaya tampilan chart & statistik bisa langsung dilihat.
-// =========================================================
+// data penduduk
 const DATA_DEMOGRAFI = {
   totalPenduduk: 3250,     // TODO: ganti jumlah penduduk asli
   lakiLaki: 1620,          // TODO: ganti jumlah laki-laki asli
   perempuan: 1630,         // TODO: ganti jumlah perempuan asli
-  jumlahUMKM: 12,          // TODO: ganti jumlah UMKM asli
+  jumlahUMKM: 5,          // TODO: ganti kalau jumlah UMKM terdaftar berbeda dari daftar DATA_UMKM di bawah
   usia: [                  // TODO: ganti kelompok usia & jumlah asli
     { kelompok: "0–14 th", jumlah: 640 },
     { kelompok: "15–24 th", jumlah: 520 },
@@ -27,14 +23,16 @@ const DATA_DEMOGRAFI = {
   ],
 };
 
-// =========================================================
-// CARA MENAMBAH FOTO KEGIATAN:
-// 1. Taruh file foto di folder assets/image/ (contoh: assets/image/kerja-bakti-1.jpg)
-// 2. Isi properti "gambar" dengan path relatif dari folder pages/, jadi diawali "../assets/image/..."
-//    misal: gambar: "../assets/image/kerja-bakti-1.jpg"
-// 3. Kalau "gambar" tidak diisi (dihapus/kosong), kartu akan otomatis pakai ikon emoji di "icon"
-// Kegiatan boleh sebanyak apapun — tinggal tambah objek baru { ... } di dalam array ini.
-// =========================================================
+// data umkm
+const DATA_UMKM = [
+  { nama: "UMKM Bu Desi", jenis: "Toko Kelontong", telp: "085701013952" },
+  { nama: "UMKM Pak Listyo", jenis: "Toko Kelontong", telp: "085692067225" },
+  { nama: "UMKM Bu Partiyam", jenis: "Seblak", telp: "085747503911" },
+  { nama: "UMKM Pak Purwanto", jenis: "Toko Kelontong", telp: "085802157364" },
+  { nama: "UMKM Bu Sumiyatun", jenis: "Es Teh", telp: "082265461781" },
+];
+
+// data berita
 const DATA_BERITA = [
   // TODO: ganti dengan berita asli desa. Tambah objek baru untuk berita baru.
   {
@@ -153,9 +151,40 @@ function renderBerita() {
   `).join("");
 }
 
+// Render kartu UMKM (dengan tombol WhatsApp otomatis)
+function renderUMKM() {
+  const grid = document.getElementById("umkm-grid");
+  const iconMap = {
+    "toko kelontong": "🛒",
+    "seblak": "🌶️",
+    "es teh": "🥤",
+    "peternak": "🐄",
+    "bengkel": "🔧",
+  };
+  if (grid) {
+    grid.innerHTML = DATA_UMKM.map(u => {
+      const icon = iconMap[u.jenis.toLowerCase()] || "🏪";
+      const digits = u.telp.replace(/\D/g, "");
+      const waNumber = digits.replace(/^0/, "62");
+      const formatted = digits.replace(/(\d{4})(\d{4})(\d+)/, "$1-$2-$3");
+      return `
+        <div class="umkm-item">
+          <div class="ico">${icon}</div>
+          <div class="nama">${u.nama}</div>
+          <div class="jenis">${u.jenis}</div>
+          <a class="telp" href="https://wa.me/${waNumber}" target="_blank" rel="noopener">💬 ${formatted}</a>
+        </div>
+      `;
+    }).join("");
+  }
+  const countEl = document.getElementById("umkm-count-num");
+  if (countEl) countEl.textContent = DATA_UMKM.length.toLocaleString("id-ID");
+}
+
 renderStatNumbers();
 renderCharts();
 renderBerita();
+renderUMKM();
 
 // Ubah navbar dari transparan jadi solid saat halaman discroll
 const navHeader = document.querySelector('header.nav');

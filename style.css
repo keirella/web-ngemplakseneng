@@ -253,12 +253,26 @@ header.nav.nav--home:not(.scrolled) .burger span{background:var(--putih);}
   padding:20px 24px;margin-bottom:26px;font-size:.9rem;color:var(--biru-gelap);
 }
 .umkm-note b{color:var(--biru-tua);}
-.umkm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.umkm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
 .umkm-card{
   border:1.5px dashed var(--garis);border-radius:var(--radius);
   padding:28px 20px;text-align:center;color:var(--teks-lembut);font-size:.87rem;
 }
 .umkm-card .plus{font-family:'Sora',sans-serif;font-size:1.5rem;color:var(--biru);margin-bottom:8px;font-weight:700;}
+.umkm-item{
+  background:var(--putih);border:1px solid var(--garis);border-radius:var(--radius);
+  padding:26px 20px;text-align:center;transition:.2s;
+}
+.umkm-item:hover{border-color:var(--biru);box-shadow:var(--shadow);}
+.umkm-item .ico{font-size:1.7rem;margin-bottom:10px;}
+.umkm-item .nama{font-family:'Sora',sans-serif;font-weight:600;font-size:1rem;}
+.umkm-item .jenis{font-size:.85rem;color:var(--teks-lembut);margin:4px 0 14px;}
+.umkm-item .telp{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.85rem;font-weight:600;color:var(--biru);
+  border:1px solid var(--biru-muda);border-radius:999px;padding:7px 14px;
+}
+.umkm-item .telp:hover{background:var(--biru);color:var(--putih);border-color:var(--biru);}
 
 /* DATA NOTE (placeholder banner) */
 .data-note{
