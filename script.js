@@ -1,17 +1,25 @@
-// data penduduk
+// =========================================================
+// DATA KEPENDUDUKAN — sudah data asli (rekap/agregat)
+// Sumber: Daftar Penduduk Desa Ngemplakseneng, per akhir April 2022.
+// Catatan penting: data ini SENGAJA hanya berupa ANGKA REKAP (total, per gender,
+// per kelompok usia) — bukan daftar nama/NIK/KK/alamat per warga. Data individu
+// warga tidak dimasukkan ke kode situs karena ini situs publik; menampilkan
+// NIK/nama/alamat satu-satu berisiko disalahgunakan untuk pencurian identitas.
+// Kalau ada pembaruan data penduduk nanti, cukup update angka rekapnya di sini.
+// =========================================================
 const DATA_DEMOGRAFI = {
-  totalPenduduk: 3250,     // TODO: ganti jumlah penduduk asli
-  lakiLaki: 1620,          // TODO: ganti jumlah laki-laki asli
-  perempuan: 1630,         // TODO: ganti jumlah perempuan asli
-  jumlahUMKM: 5,          // TODO: ganti kalau jumlah UMKM terdaftar berbeda dari daftar DATA_UMKM di bawah
-  usia: [                  // TODO: ganti kelompok usia & jumlah asli
-    { kelompok: "0–14 th", jumlah: 640 },
-    { kelompok: "15–24 th", jumlah: 520 },
-    { kelompok: "25–54 th", jumlah: 1380 },
-    { kelompok: "55–64 th", jumlah: 430 },
-    { kelompok: "65+ th", jumlah: 280 },
+  totalPenduduk: 3389,     // per akhir April 2022
+  lakiLaki: 1663,
+  perempuan: 1726,
+  jumlahUMKM: 5,          // TODO: ganti jumlah UMKM/unit usaha binaan BUMDes yang sebenarnya
+  usia: [                  // per akhir April 2022, dihitung dari umur per warga (bukan daftar individu)
+    { kelompok: "0–14 th", jumlah: 764 },
+    { kelompok: "15–24 th", jumlah: 485 },
+    { kelompok: "25–54 th", jumlah: 1404 },
+    { kelompok: "55–64 th", jumlah: 366 },
+    { kelompok: "65+ th", jumlah: 370 },
   ],
-  mataPencaharian: [        // TODO: ganti jumlah per mata pencaharian asli
+  mataPencaharian: [        // TODO: masih data CONTOH — file penduduk yang dikirim belum ada kolom pekerjaan
     { label: "Petani & Buruh Tani", jumlah: 1450 },
     { label: "Peternak", jumlah: 310 },
     { label: "Pedagang", jumlah: 240 },
@@ -21,18 +29,43 @@ const DATA_DEMOGRAFI = {
     { label: "TNI / Polri", jumlah: 35 },
     { label: "Karyawan Swasta & PNS", jumlah: 260 },
   ],
+  agama: [                  // per akhir April 2022
+    { label: "Islam", jumlah: 3341 },
+    { label: "Kristen", jumlah: 39 },
+    { label: "Katholik", jumlah: 9 },
+  ],
+  alamat: [                  // per akhir April 2022 — jumlah warga per dusun/wilayah
+    { label: "Pacitan", jumlah: 484 },
+    { label: "Dampit", jumlah: 358 },
+    { label: "Jati", jumlah: 248 },
+    { label: "Gulangan", jumlah: 246 },
+    { label: "Gunting", jumlah: 236 },
+    { label: "Dukuhan", jumlah: 226 },
+    { label: "Parangharjo", jumlah: 183 },
+    { label: "Jaten", jumlah: 176 },
+    { label: "Tiyeng", jumlah: 150 },
+    { label: "Randusari", jumlah: 149 },
+    { label: "Weru", jumlah: 147 },
+    { label: "Cangakan", jumlah: 140 },
+    { label: "Losari", jumlah: 137 },
+    { label: "Seneng", jumlah: 115 },
+    { label: "Bogag", jumlah: 112 },
+    { label: "Bulurejo", jumlah: 93 },
+    { label: "Jetis", jumlah: 68 },
+    { label: "Ngemplak", jumlah: 63 },
+    { label: "Gambrengan", jumlah: 39 },
+    { label: "Salamrejo", jumlah: 19 },
+  ],
 };
 
-// data umkm
-const DATA_UMKM = [
-  { nama: "UMKM Bu Desi", jenis: "Toko Kelontong", telp: "085701013952" },
-  { nama: "UMKM Pak Listyo", jenis: "Toko Kelontong", telp: "085692067225" },
-  { nama: "UMKM Bu Partiyam", jenis: "Seblak", telp: "085747503911" },
-  { nama: "UMKM Pak Purwanto", jenis: "Toko Kelontong", telp: "085802157364" },
-  { nama: "UMKM Bu Sumiyatun", jenis: "Es Teh", telp: "082265461781" },
-];
-
-// data berita
+// =========================================================
+// CARA MENAMBAH FOTO KEGIATAN:
+// 1. Taruh file foto di folder assets/image/ (contoh: assets/image/kerja-bakti-1.jpg)
+// 2. Isi properti "gambar" dengan path relatif dari folder pages/, jadi diawali "../assets/image/..."
+//    misal: gambar: "../assets/image/kerja-bakti-1.jpg"
+// 3. Kalau "gambar" tidak diisi (dihapus/kosong), kartu akan otomatis pakai ikon emoji di "icon"
+// Kegiatan boleh sebanyak apapun — tinggal tambah objek baru { ... } di dalam array ini.
+// =========================================================
 const DATA_BERITA = [
   // TODO: ganti dengan berita asli desa. Tambah objek baru untuk berita baru.
   {
@@ -73,8 +106,6 @@ function renderStatNumbers() {
     const el = document.getElementById(id);
     if (el) el.textContent = val.toLocaleString("id-ID");
   });
-  const umkmCountEl = document.getElementById("umkm-count-num");
-  if (umkmCountEl) umkmCountEl.textContent = DATA_DEMOGRAFI.jumlahUMKM.toLocaleString("id-ID");
 }
 
 // Render chart pakai Chart.js (dimuat lewat CDN di index.html)
@@ -132,6 +163,37 @@ function renderCharts() {
       },
     });
   }
+
+  // Agama (pie)
+  const canvasAgama = document.getElementById("chart-agama");
+  if (canvasAgama) {
+    new Chart(canvasAgama, {
+      type: "pie",
+      data: {
+        labels: DATA_DEMOGRAFI.agama.map(a => a.label),
+        datasets: [{ data: DATA_DEMOGRAFI.agama.map(a => a.jumlah), backgroundColor: [navy, "#8FB3D6", "#D8E4F0"] }],
+      },
+      options: { plugins: { legend: { position: "bottom" } }, maintainAspectRatio: false },
+    });
+  }
+
+  // Alamat / dusun (bar horizontal)
+  const canvasAlamat = document.getElementById("chart-alamat");
+  if (canvasAlamat) {
+    new Chart(canvasAlamat, {
+      type: "bar",
+      data: {
+        labels: DATA_DEMOGRAFI.alamat.map(a => a.label),
+        datasets: [{ label: "Jumlah", data: DATA_DEMOGRAFI.alamat.map(a => a.jumlah), backgroundColor: navy, borderRadius: 5 }],
+      },
+      options: {
+        indexAxis: "y",
+        plugins: { legend: { display: false } },
+        maintainAspectRatio: false,
+        scales: { x: { beginAtZero: true } },
+      },
+    });
+  }
 }
 
 // Render kartu berita
@@ -151,40 +213,9 @@ function renderBerita() {
   `).join("");
 }
 
-// Render kartu UMKM (dengan tombol WhatsApp otomatis)
-function renderUMKM() {
-  const grid = document.getElementById("umkm-grid");
-  const iconMap = {
-    "toko kelontong": "🛒",
-    "seblak": "🌶️",
-    "es teh": "🥤",
-    "peternak": "🐄",
-    "bengkel": "🔧",
-  };
-  if (grid) {
-    grid.innerHTML = DATA_UMKM.map(u => {
-      const icon = iconMap[u.jenis.toLowerCase()] || "🏪";
-      const digits = u.telp.replace(/\D/g, "");
-      const waNumber = digits.replace(/^0/, "62");
-      const formatted = digits.replace(/(\d{4})(\d{4})(\d+)/, "$1-$2-$3");
-      return `
-        <div class="umkm-item">
-          <div class="ico">${icon}</div>
-          <div class="nama">${u.nama}</div>
-          <div class="jenis">${u.jenis}</div>
-          <a class="telp" href="https://wa.me/${waNumber}" target="_blank" rel="noopener">💬 ${formatted}</a>
-        </div>
-      `;
-    }).join("");
-  }
-  const countEl = document.getElementById("umkm-count-num");
-  if (countEl) countEl.textContent = DATA_UMKM.length.toLocaleString("id-ID");
-}
-
 renderStatNumbers();
 renderCharts();
 renderBerita();
-renderUMKM();
 
 // Ubah navbar dari transparan jadi solid saat halaman discroll
 const navHeader = document.querySelector('header.nav');

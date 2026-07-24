@@ -224,7 +224,7 @@ header.nav.nav--home:not(.scrolled) .burger span{background:var(--putih);}
 .org-name{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:.78rem;color:var(--teks-lembut);margin-top:5px;}
 .org-card.kadus .org-name{color:rgba(255,255,255,.85);}
 .org-name.org-kosong{font-style:italic;color:#b9b0b0;}
-.lembaga-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;}
+.lembaga-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:34px;}
 .chip{
   font-family:'JetBrains Mono',monospace;font-size:.76rem;
   padding:9px 16px;border-radius:999px;
@@ -246,6 +246,20 @@ header.nav.nav--home:not(.scrolled) .burger span{background:var(--putih);}
 .potensi-card b{display:block;font-size:.9rem;margin-top:2px;font-weight:600;}
 .potensi-card.main b{font-family:'Sora',sans-serif;font-size:1.25rem;}
 .potensi-card.main span{color:rgba(255,255,255,.8);font-size:.85rem;margin-top:8px;display:block;}
+
+/* BUMDES */
+.bumdes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;}
+.bumdes-card{
+  background:var(--putih);border:1px solid var(--garis);border-radius:var(--radius);
+  padding:26px 20px;text-align:center;transition:.2s;
+}
+.bumdes-card:hover{border-color:var(--biru);box-shadow:var(--shadow);transform:translateY(-2px);}
+.bumdes-card .ico-wrap{
+  width:52px;height:52px;border-radius:50%;background:var(--biru-muda);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;
+}
+.bumdes-card b{font-family:'Sora',sans-serif;font-size:.96rem;display:block;margin-bottom:6px;}
+.bumdes-card span{font-size:.83rem;color:var(--teks-lembut);}
 
 .umkm-note{
   display:flex;align-items:center;gap:16px;
@@ -309,6 +323,7 @@ header.nav.nav--home:not(.scrolled) .burger span{background:var(--putih);}
 .chart-card.wide{grid-column:span 2;}
 .chart-card h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:600;margin-bottom:14px;}
 .chart-box{position:relative;height:260px;}
+.chart-box.chart-box-tall{height:520px;}
 
 /* UMKM COUNT */
 .umkm-count{
