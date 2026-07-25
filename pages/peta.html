@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Peta Tataguna Lahan — Desa Ngemplakseneng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta name="description" content="Peta Tataguna Lahan Desa Ngemplakseneng, memuat layer GeoJSON tataguna lahan.">
+  <style>
+    /* sederhana: pastikan peta memenuhi area */
+    #map { width:100%; height:80vh; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.18); }
+    .page-wrap { max-width:1100px; margin:28px auto; padding:0 20px; }
+    .map-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; }
+    .legend-item { display:flex; align-items:center; gap:8px; font-size:.95rem; }
+    .legend-swatch { width:20px; height:14px; border:1px solid rgba(0,0,0,.2); }
+  </style>
+</head>
+<body class="page">
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="logo"><span class="mark">N</span> Ngemplakseneng</a>
+      <nav class="nav-links">
+        <a href="../index.html">Beranda</a>
+        <a href="sejarah.html">Sejarah</a>
+        <a href="visimisi.html">Visi &amp; Misi</a>
+        <a href="pemerintahan.html">Pemerintahan</a>
+        <a href="statistik.html">Statistik</a>
+        <a href="potensi.html">Potensi Desa</a>
+        <a href="berita.html">Berita</a>
+        <a href="peta.html" class="active">Peta</a>
+      </nav>
+      <a href="kontak.html" class="nav-cta">Hubungi Kami</a>
+      <button class="burger" id="burger"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="section page-hero">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <div class="eyebrow">Informasi Desa</div>
+          <h2>Peta Tataguna Lahan</h2>
+          <p>Layer tataguna lahan Desa Ngemplakseneng. Klik area untuk melihat legenda.</p>
+        </div>
+
+        <div id="map" role="application" aria-label="Peta Tataguna Lahan"></div>
+        <div id="map-fallback" aria-hidden="true" style="display:none;margin-top:12px;padding:14px;border-radius:12px;background:#FFF6F4;border:1px solid #F2D6D4;color:#7A2A2A;font-size:.95rem;"></div>
+
+        <div class="map-legend" id="map-legend" data-reveal>
+          <div class="legend-item"><span class="legend-swatch" style="background:#044e28"></span>Semak Belukar</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#9fe6b8"></span>Sawah</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#4CAF50"></span>Kebun</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#5e5e5e"></span>Pasir / Lahan Terbuka</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#861717"></span>Pemukiman</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#21d4ff"></span>Sungai</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#060606"></span>Jalan</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../script.js" defer></script>
+</body>
+</html>

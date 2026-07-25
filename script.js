@@ -242,3 +242,89 @@ const io = new IntersectionObserver((entries) => {
   });
 }, { threshold: .15 });
 revealEls.forEach(el => io.observe(el));
+
+// ========== Leaflet map initializer (only runs when #map exists) ==========
+function initLeafletMapIfPresent() {
+  const mapEl = document.getElementById('map');
+  if (!mapEl) return; // nothing to do on pages without a map
+  if (typeof L === 'undefined') { console.error('Leaflet belum dimuat di halaman ini.'); return; }
+
+  // GeoJSON folder path: depends whether page is inside /pages/
+  const basePath = location.pathname.includes('/pages/') ? '../assets/tatagunalahan_geojson/' : 'assets/tatagunalahan_geojson/';
+
+  const filenames = [
+    'ADMINISTRASIDESA_AR_Ngemplakseneng.geojson',
+    'AGRIKEBUN_AR_Clipped.geojson',
+    'AGRILADANG_AR_Clipped.geojson',
+    'AGRISAWAH_AR_Clipped.geojson',
+    'JALAN_LN_Clipped.geojson',
+    'NONAGRISEMAKBELUKAR_AR_Clipped.geojson',
+    'PASIR_AR_Clipped.geojson',
+    'PEMUKIMAN_AR_Clipped.geojson',
+    'SUNGAI_LN_Clipped.geojson'
+  ];
+
+  const styles = {
+    'AGRISAWAH_AR_Clipped.geojson': { color: '#0a5', fillColor: '#9fe6b8', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'AGRILADANG_AR_Clipped.geojson': { color: '#13623a', fillColor: '#3b8b3b', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'AGRIKEBUN_AR_Clipped.geojson': { color: '#085a12', fillColor: '#4CAF50', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'NONAGRISEMAKBELUKAR_AR_Clipped.geojson': { color: '#044e28', fillColor: '#044e28', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'PASIR_AR_Clipped.geojson': { color: '#5e5e5e', fillColor: '#5e5e5e', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'PEMUKIMAN_AR_Clipped.geojson': { color: '#861717', fillColor: '#861717', weight: 1, opacity: 0.8, fillOpacity: 0.6 },
+    'JALAN_LN_Clipped.geojson': { color: '#111', weight: 3, opacity: 0.8 },
+    'SUNGAI_LN_Clipped.geojson': { color: '#21d4ff', weight: 3, opacity: 0.8 },
+    'ADMINISTRASIDESA_AR_Ngemplakseneng.geojson': { color: '#000', weight: 2, fill: false }
+  };
+
+  // create map
+  const map = L.map('map', { zoomControl: true });
+
+  // satellite basemap (ESRI World Imagery)
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri', maxZoom: 19
+  }).addTo(map);
+
+  const created = [];
+  const layersControl = {};
+
+  // load each file and add to map
+  Promise.all(filenames.map(fn => fetch(basePath + fn).then(r => {
+    if (!r.ok) throw new Error('Gagal memuat ' + fn);
+    return r.json();
+  }).then(geo => {
+    const style = styles[fn] || { color: '#666', fillColor: '#ccc', weight: 1, fillOpacity: 0.7 };
+    const layer = L.geoJSON(geo, {
+      style: style,
+      pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 4, fillColor: style.fillColor || style.color, color: style.color, weight: 1, fillOpacity: 0.9 }),
+      onEachFeature: (feature, layer) => {
+        if (feature && feature.properties) {
+          const remark = feature.properties.REMARK || feature.properties.remark || feature.properties.keterangan || feature.properties.KETERANGAN || feature.properties.remarks || feature.properties.REMARKS || 'Tidak ada keterangan';
+          layer.bindPopup(`<div style="max-width:260px">${remark}</div>`);
+        }
+      }
+    }).addTo(map);
+
+    created.push(layer);
+  }).catch(err => {
+    console.warn(err);
+  }))).then(() => {
+    if (created.length) {
+      const group = L.featureGroup(created);
+      try { map.fitBounds(group.getBounds(), { maxZoom: 18 }); } catch (e) { map.setView([-7.678,110.8], 14); }
+      // ensure Leaflet correctly renders when map container size changes
+      setTimeout(() => map.invalidateSize(true), 350);
+    }
+  }).catch(err => {
+    console.error(err);
+    // show friendly message to the user with instructions to run a local server
+    const fallback = document.getElementById('map-fallback');
+    if (fallback) {
+      fallback.style.display = 'block';
+      fallback.innerHTML = `Peta gagal memuat layer GeoJSON saat membuka file langsung (file://). Untuk menampilkan peta, jalankan situs lewat server lokal. Contoh menjalankan server sederhana dengan Python di folder proyek:\n\n<pre style="background:#fff;padding:8px;border-radius:6px;border:1px solid #eee;">python -m http.server 8000</pre>\n\nLalu buka http://localhost:8000/pages/peta.html di browser.`;
+    }
+  });
+  // also try to fix map rendering after window resizes (helpful in some browsers)
+  window.addEventListener('resize', () => { setTimeout(() => map.invalidateSize(), 200); });
+}
+
+document.addEventListener('DOMContentLoaded', initLeafletMapIfPresent);
