@@ -253,11 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btn = document.getElementById("login-btn");
     const errEl = document.getElementById("login-error");
     errEl.textContent = "";
-
-    if (typeof isDataConfigReady !== "function" || !isDataConfigReady()) {
-      errEl.textContent = "Apps Script belum disetel di data-config.js. Lihat PANDUAN_ADMIN.md.";
-      return;
-    }
+    
     btn.disabled = true;
     btn.textContent = "Memeriksa...";
     try {
