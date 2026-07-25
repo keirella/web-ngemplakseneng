@@ -1,12 +1,4 @@
-// =========================================================
-// DATA KEPENDUDUKAN — sudah data asli (rekap/agregat)
-// Sumber: Daftar Penduduk Desa Ngemplakseneng, per akhir April 2022.
-// Catatan penting: data ini SENGAJA hanya berupa ANGKA REKAP (total, per gender,
-// per kelompok usia) — bukan daftar nama/NIK/KK/alamat per warga. Data individu
-// warga tidak dimasukkan ke kode situs karena ini situs publik; menampilkan
-// NIK/nama/alamat satu-satu berisiko disalahgunakan untuk pencurian identitas.
-// Kalau ada pembaruan data penduduk nanti, cukup update angka rekapnya di sini.
-// =========================================================
+// data demografi
 const DEFAULT_DATA_DEMOGRAFI = {
   totalPenduduk: 3389,     // per akhir April 2022
   lakiLaki: 1663,
@@ -58,10 +50,7 @@ const DEFAULT_DATA_DEMOGRAFI = {
   ],
 };
 
-// =========================================================
-// DATA BUMDES — unit usaha BUMDes "Bina Usaha Sejahtera"
-// Cara menambah/edit unit: copy salah satu blok { ... }, ganti isinya.
-// =========================================================
+// data bumdes
 const DEFAULT_DATA_BUMDES = [
   { icon: "🛒", nama: "UMKM", deskripsi: "Membina & mendampingi usaha mikro milik warga desa." },
   { icon: "💰", nama: "Simpan Pinjam", deskripsi: "Layanan simpan pinjam untuk membantu permodalan usaha warga." },
@@ -70,16 +59,7 @@ const DEFAULT_DATA_BUMDES = [
   { icon: "🍈", nama: "Tanam Melon", deskripsi: "Unit usaha pertanian melon sebagai sumber pendapatan desa." },
 ];
 
-// =========================================================
-// CARA MENAMBAH FOTO KEGIATAN:
-// 1. Taruh file foto di folder assets/image/ (contoh: assets/image/kerja-bakti-1.jpg)
-// 2. Isi properti "gambar" dengan path relatif dari folder pages/, jadi diawali "../assets/image/..."
-//    misal: gambar: "../assets/image/kerja-bakti-1.jpg"
-// 3. Kalau "gambar" tidak diisi (dihapus/kosong), kartu akan otomatis pakai ikon emoji di "icon"
-// 4. Untuk kegiatan RUTIN (bukan berita sekali kejadian), isi "date" dengan jadwalnya,
-//    misal "Setiap Jumat, 15.30–selesai" — field ini bebas teks, tidak harus tanggal pasti.
-// Kegiatan boleh sebanyak apapun — tinggal tambah objek baru { ... } di dalam array ini.
-// =========================================================
+// data berita
 const DEFAULT_DATA_BERITA = [
   {
     tag: "Keagamaan",
@@ -123,16 +103,12 @@ const DEFAULT_DATA_BERITA = [
   },
 ];
 
-// =========================================================
-// DATA AKTIF YANG DIPAKAI HALAMAN — diisi dari Firebase kalau sudah
-// disetel (lihat firebase-config.js & PANDUAN_ADMIN.md), kalau belum
-// otomatis pakai data bawaan (DEFAULT_...) di atas.
-// =========================================================
+// data aktif
 let DATA_DEMOGRAFI = DEFAULT_DATA_DEMOGRAFI;
 let DATA_BUMDES = DEFAULT_DATA_BUMDES;
 let DATA_BERITA = DEFAULT_DATA_BERITA;
 
-// Ambil data terbaru dari Google Sheets (lewat Apps Script), kalau sudah disetel
+// Ambil data terbaru dari Google Sheets 
 async function loadLiveData() {
   if (typeof isDataConfigReady !== "function" || !isDataConfigReady()) return; // belum disetel — pakai data bawaan
   try {
@@ -351,7 +327,11 @@ function initLeafletMapIfPresent() {
   };
 
   // create map
-  const map = L.map('map', { zoomControl: true });
+  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+
+  // aktifkan scroll-zoom hanya saat peta diklik, biar scroll halaman tidak "kejebak" di peta
+  map.on('click', () => map.scrollWheelZoom.enable());
+  map.on('mouseout', () => map.scrollWheelZoom.disable());
 
   // satellite basemap (ESRI World Imagery)
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -385,19 +365,17 @@ function initLeafletMapIfPresent() {
     if (created.length) {
       const group = L.featureGroup(created);
       try { map.fitBounds(group.getBounds(), { maxZoom: 18 }); } catch (e) { map.setView([-7.678,110.8], 14); }
-      // ensure Leaflet correctly renders when map container size changes
+      
       setTimeout(() => map.invalidateSize(true), 350);
     }
   }).catch(err => {
     console.error(err);
-    // show friendly message to the user with instructions to run a local server
     const fallback = document.getElementById('map-fallback');
     if (fallback) {
       fallback.style.display = 'block';
       fallback.innerHTML = `Peta gagal memuat layer GeoJSON saat membuka file langsung (file://). Untuk menampilkan peta, jalankan situs lewat server lokal. Contoh menjalankan server sederhana dengan Python di folder proyek:\n\n<pre style="background:#fff;padding:8px;border-radius:6px;border:1px solid #eee;">python -m http.server 8000</pre>\n\nLalu buka http://localhost:8000/pages/peta.html di browser.`;
     }
   });
-  // also try to fix map rendering after window resizes (helpful in some browsers)
   window.addEventListener('resize', () => { setTimeout(() => map.invalidateSize(), 200); });
 }
 

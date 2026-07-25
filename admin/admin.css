@@ -1,3 +1,8 @@
+/* ============================================
+   ADMIN DASHBOARD — Desa Ngemplakseneng
+   Layout: sidebar + content, tema navy
+   ============================================ */
+
 :root{
   --adm-navy:        var(--biru-tua, #1a2a52);
   --adm-navy-deep:    #101c3a;
@@ -155,8 +160,9 @@ body{ background:var(--adm-bg); }
 
 .card{
   background:var(--adm-surface);border:1px solid var(--adm-border);border-radius:var(--adm-radius);
-  padding:24px;margin-bottom:18px;box-shadow:var(--adm-shadow);
+  padding:24px;margin-bottom:18px;box-shadow:var(--adm-shadow);transition:box-shadow .18s, border-color .18s, transform .18s;
 }
+.card:hover{border-color:#cfd8ef;box-shadow:0 12px 30px rgba(16,28,58,.12);}
 .card h3{
   font-family:'Sora',sans-serif;font-size:.98rem;margin:0 0 16px;color:var(--adm-text);
   display:flex;align-items:center;gap:8px;
@@ -199,8 +205,10 @@ body{ background:var(--adm-bg); }
 
 .berita-card-edit{
   border:1px solid var(--adm-border);border-radius:12px;padding:18px;margin-bottom:14px;position:relative;
-  background:var(--adm-bg);
+  background:var(--adm-surface);box-shadow:var(--adm-shadow);
+  transition:box-shadow .18s, border-color .18s;
 }
+.berita-card-edit:hover{border-color:#cfd8ef;box-shadow:0 12px 30px rgba(16,28,58,.12);}
 .berita-card-edit .row-remove{position:absolute;top:14px;right:14px;}
 
 /* ---------- RESPONSIVE ---------- */
