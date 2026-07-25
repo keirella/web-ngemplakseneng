@@ -1,8 +1,3 @@
-/* ============================================
-   ADMIN DASHBOARD — Desa Ngemplakseneng
-   Layout: sidebar + content, tema navy
-   ============================================ */
-
 :root{
   --adm-navy:        var(--biru-tua, #1a2a52);
   --adm-navy-deep:    #101c3a;

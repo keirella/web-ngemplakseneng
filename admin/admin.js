@@ -1,7 +1,3 @@
-/* ============================================
-   ADMIN DASHBOARD — Desa Ngemplakseneng
-   Logika: login, tab, form, simpan ke Apps Script
-   ============================================ */
 document.addEventListener("DOMContentLoaded", function () {
 
   let ADMIN_TOKEN = sessionStorage.getItem("admin_token") || "";
@@ -41,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return res.json();
   }
 
-  /* ---------- Kelompok usia / mata pencaharian / agama / alamat (key-value rows) ---------- */
+  /* ---------- Kelompok usia / mata pencaharian / agama / alamat ---------- */
   function renderKVRows(containerId, data, labelKey) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -126,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
       <div class="field" style="margin-bottom:10px;"><label>Judul</label><input type="text" class="b-title" value="${b.title || ""}"></div>
       <div class="field" style="margin-bottom:10px;"><label>Ringkasan</label><textarea class="b-excerpt">${b.excerpt || ""}</textarea></div>
-      <div class="field"><label>Path Foto (kosongkan kalau pakai ikon), cth: ../assets/image/nama-file.jpg</label><input type="text" class="b-gambar" value="${b.gambar || ""}"></div>
+      <div class="field"><label>Path Foto (kosongkan kalau pakai ikon)</label><input type="text" class="b-gambar" value="${b.gambar || ""}"></div>
     `;
     row.querySelector(".row-remove").addEventListener("click", () => row.remove());
     container.appendChild(row);
