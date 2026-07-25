@@ -7,7 +7,7 @@
 // NIK/nama/alamat satu-satu berisiko disalahgunakan untuk pencurian identitas.
 // Kalau ada pembaruan data penduduk nanti, cukup update angka rekapnya di sini.
 // =========================================================
-const DATA_DEMOGRAFI = {
+const DEFAULT_DATA_DEMOGRAFI = {
   totalPenduduk: 3389,     // per akhir April 2022
   lakiLaki: 1663,
   perempuan: 1726,
@@ -59,6 +59,18 @@ const DATA_DEMOGRAFI = {
 };
 
 // =========================================================
+// DATA BUMDES — unit usaha BUMDes "Bina Usaha Sejahtera"
+// Cara menambah/edit unit: copy salah satu blok { ... }, ganti isinya.
+// =========================================================
+const DEFAULT_DATA_BUMDES = [
+  { icon: "🛒", nama: "UMKM", deskripsi: "Membina & mendampingi usaha mikro milik warga desa." },
+  { icon: "💰", nama: "Simpan Pinjam", deskripsi: "Layanan simpan pinjam untuk membantu permodalan usaha warga." },
+  { icon: "🍡", nama: "Jajanan Pasar", deskripsi: "Unit usaha kuliner & jajanan pasar tradisional." },
+  { icon: "🧾", nama: "Perpajakan", deskripsi: "Layanan pembayaran pajak & retribusi desa." },
+  { icon: "🍈", nama: "Tanam Melon", deskripsi: "Unit usaha pertanian melon sebagai sumber pendapatan desa." },
+];
+
+// =========================================================
 // CARA MENAMBAH FOTO KEGIATAN:
 // 1. Taruh file foto di folder assets/image/ (contoh: assets/image/kerja-bakti-1.jpg)
 // 2. Isi properti "gambar" dengan path relatif dari folder pages/, jadi diawali "../assets/image/..."
@@ -66,7 +78,7 @@ const DATA_DEMOGRAFI = {
 // 3. Kalau "gambar" tidak diisi (dihapus/kosong), kartu akan otomatis pakai ikon emoji di "icon"
 // Kegiatan boleh sebanyak apapun — tinggal tambah objek baru { ... } di dalam array ini.
 // =========================================================
-const DATA_BERITA = [
+const DEFAULT_DATA_BERITA = [
   // TODO: ganti dengan berita asli desa. Tambah objek baru untuk berita baru.
   {
     tag: "Pengumuman",
@@ -93,6 +105,30 @@ const DATA_BERITA = [
     gambar: "", // contoh: "../assets/image/bibit-tani-1.jpg"
   },
 ];
+
+// =========================================================
+// DATA AKTIF YANG DIPAKAI HALAMAN — diisi dari Firebase kalau sudah
+// disetel (lihat firebase-config.js & PANDUAN_ADMIN.md), kalau belum
+// otomatis pakai data bawaan (DEFAULT_...) di atas.
+// =========================================================
+let DATA_DEMOGRAFI = DEFAULT_DATA_DEMOGRAFI;
+let DATA_BUMDES = DEFAULT_DATA_BUMDES;
+let DATA_BERITA = DEFAULT_DATA_BERITA;
+
+// Ambil data terbaru dari Google Sheets (lewat Apps Script), kalau sudah disetel
+async function loadLiveData() {
+  if (typeof isDataConfigReady !== "function" || !isDataConfigReady()) return; // belum disetel — pakai data bawaan
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method: "GET" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (data.demografi) DATA_DEMOGRAFI = data.demografi;
+    if (data.bumdes) DATA_BUMDES = data.bumdes;
+    if (data.berita) DATA_BERITA = data.berita;
+  } catch (e) {
+    console.warn("Gagal mengambil data terbaru, memakai data bawaan:", e);
+  }
+}
 
 // Render kartu statistik angka
 function renderStatNumbers() {
@@ -213,9 +249,30 @@ function renderBerita() {
   `).join("");
 }
 
-renderStatNumbers();
-renderCharts();
-renderBerita();
+// Render kartu unit BUMDes
+function renderBUMDes() {
+  const grid = document.getElementById("bumdes-grid");
+  if (!grid) return;
+  grid.innerHTML = DATA_BUMDES.map(b => `
+    <div class="bumdes-card">
+      <div class="ico-wrap">${b.icon}</div>
+      <b>${b.nama}</b>
+      <span>${b.deskripsi}</span>
+    </div>
+  `).join("");
+}
+
+async function initSite() {
+  await loadLiveData();
+  renderStatNumbers();
+  renderCharts();
+  renderBerita();
+  renderBUMDes();
+  window.__siteDataReady = true;
+  window.dispatchEvent(new Event("site-data-ready"));
+}
+window.__siteDataReady = false;
+initSite();
 
 // Ubah navbar dari transparan jadi solid saat halaman discroll
 const navHeader = document.querySelector('header.nav');

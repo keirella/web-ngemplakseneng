@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin — Desa Ngemplakseneng</title>
+<link rel="stylesheet" href="../style.css">
+<script src="data-config.js" defer></script>
+<script src="../script.js" defer></script>
+<style>
+  body{background:var(--abu);}
+  .admin-wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
+
+  /* LOGIN */
+  .admin-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .login-box{
+    background:var(--putih);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:40px 36px;max-width:380px;width:100%;text-align:center;
+  }
+  .login-box .mark{
+    width:44px;height:44px;border-radius:12px;background:var(--biru);color:var(--putih);
+    display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;
+    font-weight:700;font-size:1.2rem;margin:0 auto 18px;
+  }
+  .login-box h1{font-size:1.3rem;margin-bottom:4px;}
+  .login-box p.sub{color:var(--teks-lembut);font-size:.88rem;margin-bottom:24px;}
+  .login-box input{
+    width:100%;padding:12px 14px;border:1px solid var(--garis);border-radius:10px;
+    margin-bottom:12px;font-family:'Inter',sans-serif;font-size:.92rem;
+  }
+  .login-box button{
+    width:100%;padding:12px;border:none;border-radius:999px;background:var(--biru);
+    color:var(--putih);font-weight:600;font-size:.92rem;cursor:pointer;transition:.2s;
+  }
+  .login-box button:hover{background:var(--biru-tua);}
+  .login-box button:disabled{opacity:.6;cursor:default;}
+  .login-error{color:#c0392b;font-size:.82rem;margin-top:10px;min-height:18px;}
+  .login-note{font-size:.76rem;color:var(--teks-lembut);margin-top:18px;line-height:1.5;}
+
+  /* DASHBOARD SHELL */
+  .admin-header{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--teks);color:var(--putih);padding:16px 20px;
+  }
+  .admin-header .brand{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:700;}
+  .admin-header .brand .mark{
+    width:32px;height:32px;border-radius:9px;background:var(--biru);display:flex;
+    align-items:center;justify-content:center;font-size:.9rem;
+  }
+  .btn-logout{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:var(--putih);
+    padding:8px 16px;border-radius:999px;font-size:.82rem;cursor:pointer;
+  }
+  .btn-logout:hover{background:rgba(255,255,255,.2);}
+
+  .admin-tabs{display:flex;gap:8px;margin:24px 0 20px;flex-wrap:wrap;}
+  .tab-btn{
+    padding:10px 18px;border-radius:999px;border:1px solid var(--garis);background:var(--putih);
+    font-size:.86rem;font-weight:600;color:var(--teks-lembut);cursor:pointer;transition:.2s;
+  }
+  .tab-btn.active{background:var(--biru);border-color:var(--biru);color:var(--putih);}
+
+  .status-msg{
+    font-size:.85rem;padding:10px 16px;border-radius:10px;margin-bottom:16px;display:none;
+  }
+  .status-msg.ok{display:block;background:#e6f4ea;color:#1e7e34;}
+  .status-msg.err{display:block;background:#fdecea;color:#c0392b;}
+  .status-msg.loading{display:block;background:var(--biru-muda);color:var(--biru-tua);}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .card{background:var(--putih);border:1px solid var(--garis);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+  .card h3{font-family:'Sora',sans-serif;font-size:1rem;margin-bottom:16px;}
+  .field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:6px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:.78rem;color:var(--teks-lembut);font-weight:600;}
+  .field input,.field textarea{
+    padding:9px 12px;border:1px solid var(--garis);border-radius:8px;font-family:'Inter',sans-serif;font-size:.88rem;
+  }
+  .field textarea{resize:vertical;min-height:56px;}
+
+  .kv-row{display:grid;grid-template-columns:1fr 110px 34px;gap:10px;margin-bottom:8px;align-items:center;}
+  .kv-row input{padding:8px 10px;border:1px solid var(--garis);border-radius:8px;font-size:.86rem;}
+  .row-remove{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--garis);background:var(--putih);
+    color:#c0392b;cursor:pointer;font-size:.9rem;
+  }
+  .row-remove:hover{background:#fdecea;border-color:#f5c6c1;}
+  .btn-add{
+    margin-top:6px;padding:8px 16px;border-radius:999px;border:1px dashed var(--biru);
+    background:var(--putih);color:var(--biru);font-size:.82rem;font-weight:600;cursor:pointer;
+  }
+  .btn-add:hover{background:var(--biru-muda);}
+  .btn-save{
+    padding:12px 26px;border:none;border-radius:999px;background:var(--biru);color:var(--putih);
+    font-weight:600;font-size:.9rem;cursor:pointer;margin-top:8px;
+  }
+  .btn-save:hover{background:var(--biru-tua);}
+  .btn-save:disabled{opacity:.6;cursor:default;}
+
+  .berita-card-edit{border:1px solid var(--garis);border-radius:12px;padding:18px;margin-bottom:14px;position:relative;}
+  .berita-card-edit .row-remove{position:absolute;top:14px;right:14px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="admin-login">
+  <div class="login-box">
+    <div class="mark">N</div>
+    <h1>Dashboard Admin</h1>
+    <p class="sub">Desa Ngemplakseneng</p>
+    <input type="password" id="login-password" placeholder="Kode/kata sandi admin" autocomplete="current-password">
+    <button id="login-btn">Masuk</button>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-note">Belum disetel, atau lupa kode admin? Lihat <code>PANDUAN_ADMIN.md</code> di folder utama situs.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none;">
+  <div class="admin-header">
+    <div class="brand"><span class="mark">N</span> Dashboard Admin</div>
+    <button class="btn-logout" id="logout-btn">Keluar</button>
+  </div>
+
+  <div class="admin-wrap">
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="statistik">Statistik Penduduk</button>
+      <button class="tab-btn" data-tab="bumdes">BUMDes</button>
+      <button class="tab-btn" data-tab="berita">Berita &amp; Kegiatan</button>
+    </div>
+
+    <div id="status-msg" class="status-msg"></div>
+
+    <section id="tab-statistik" class="tab-panel active">
+      <div class="card">
+        <h3>Angka Utama</h3>
+        <div class="field-row">
+          <div class="field"><label>Total Penduduk</label><input type="number" id="f-total"></div>
+          <div class="field"><label>Laki-laki</label><input type="number" id="f-lk"></div>
+          <div class="field"><label>Perempuan</label><input type="number" id="f-pr"></div>
+          <div class="field"><label>Jumlah UMKM / Unit BUMDes</label><input type="number" id="f-umkm"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Kelompok Usia</h3>
+        <div id="rows-usia"></div>
+        <button class="btn-add" data-add="usia">+ Tambah kelompok usia</button>
+      </div>
+      <div class="card">
+        <h3>Mata Pencaharian</h3>
+        <div id="rows-mp"></div>
+        <button class="btn-add" data-add="mp">+ Tambah mata pencaharian</button>
+      </div>
+      <div class="card">
+        <h3>Agama</h3>
+        <div id="rows-agama"></div>
+        <button class="btn-add" data-add="agama">+ Tambah agama</button>
+      </div>
+      <div class="card">
+        <h3>Alamat / Dusun</h3>
+        <div id="rows-alamat"></div>
+        <button class="btn-add" data-add="alamat">+ Tambah dusun</button>
+      </div>
+      <button class="btn-save" id="save-statistik">Simpan Data Statistik</button>
+    </section>
+
+    <section id="tab-bumdes" class="tab-panel">
+      <div class="card">
+        <h3>Unit Usaha BUMDes</h3>
+        <div id="rows-bumdes"></div>
+        <button class="btn-add" data-add="bumdes">+ Tambah unit usaha</button>
+      </div>
+      <button class="btn-save" id="save-bumdes">Simpan BUMDes</button>
+    </section>
+
+    <section id="tab-berita" class="tab-panel">
+      <div id="rows-berita"></div>
+      <button class="btn-add" data-add="berita">+ Tambah Berita/Kegiatan</button>
+      <br>
+      <button class="btn-save" id="save-berita">Simpan Berita &amp; Kegiatan</button>
+    </section>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  let ADMIN_TOKEN = sessionStorage.getItem("admin_token") || "";
+
+  function showStatus(msg, type) {
+    const el = document.getElementById("status-msg");
+    el.textContent = msg;
+    el.className = "status-msg " + type;
+    if (type === "ok") setTimeout(() => { el.className = "status-msg"; }, 3000);
+  }
+
+  async function postToScript(payload) {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  }
+
+  function renderKVRows(containerId, data, labelKey) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    (data || []).forEach(item => addKVRow(containerId, item[labelKey] || "", item.jumlah ?? ""));
+  }
+  function addKVRow(containerId, labelVal, jumlahVal) {
+    const container = document.getElementById(containerId);
+    const row = document.createElement("div");
+    row.className = "kv-row";
+    row.innerHTML = `
+      <input type="text" class="kv-label" placeholder="Nama/label" value="${labelVal}">
+      <input type="number" class="kv-jumlah" placeholder="Jumlah" value="${jumlahVal}">
+      <button type="button" class="row-remove">&times;</button>
+    `;
+    row.querySelector(".row-remove").addEventListener("click", () => row.remove());
+    container.appendChild(row);
+  }
+  function collectKVRows(containerId, labelKey) {
+    const rows = document.querySelectorAll("#" + containerId + " .kv-row");
+    const out = [];
+    rows.forEach(r => {
+      const label = r.querySelector(".kv-label").value.trim();
+      const jumlah = parseInt(r.querySelector(".kv-jumlah").value, 10) || 0;
+      if (label) { const o = {}; o[labelKey] = label; o.jumlah = jumlah; out.push(o); }
+    });
+    return out;
+  }
+
+  function renderBumdesRows(data) {
+    const container = document.getElementById("rows-bumdes");
+    container.innerHTML = "";
+    (data || []).forEach(u => addBumdesRow(u.icon || "", u.nama || "", u.deskripsi || ""));
+  }
+  function addBumdesRow(icon, nama, deskripsi) {
+    const container = document.getElementById("rows-bumdes");
+    const row = document.createElement("div");
+    row.className = "berita-card-edit";
+    row.innerHTML = `
+      <button type="button" class="row-remove">&times;</button>
+      <div class="field-row">
+        <div class="field"><label>Ikon (emoji)</label><input type="text" class="bd-icon" value="${icon}"></div>
+        <div class="field"><label>Nama Unit</label><input type="text" class="bd-nama" value="${nama}"></div>
+      </div>
+      <div class="field"><label>Deskripsi Singkat</label><textarea class="bd-desc">${deskripsi}</textarea></div>
+    `;
+    row.querySelector(".row-remove").addEventListener("click", () => row.remove());
+    container.appendChild(row);
+  }
+  function collectBumdesRows() {
+    const rows = document.querySelectorAll("#rows-bumdes .berita-card-edit");
+    const out = [];
+    rows.forEach(r => {
+      const nama = r.querySelector(".bd-nama").value.trim();
+      if (!nama) return;
+      out.push({
+        icon: r.querySelector(".bd-icon").value.trim() || "🏪",
+        nama: nama,
+        deskripsi: r.querySelector(".bd-desc").value.trim(),
+      });
+    });
+    return out;
+  }
+
+  function renderBeritaRows(data) {
+    const container = document.getElementById("rows-berita");
+    container.innerHTML = "";
+    (data || []).forEach(b => addBeritaRow(b));
+  }
+  function addBeritaRow(b) {
+    b = b || {};
+    const container = document.getElementById("rows-berita");
+    const row = document.createElement("div");
+    row.className = "berita-card-edit";
+    row.innerHTML = `
+      <button type="button" class="row-remove">&times;</button>
+      <div class="field-row">
+        <div class="field"><label>Tag</label><input type="text" class="b-tag" value="${b.tag || ""}"></div>
+        <div class="field"><label>Tanggal</label><input type="text" class="b-date" value="${b.date || ""}" placeholder="cth: 1 Januari 2026"></div>
+        <div class="field"><label>Ikon (emoji, dipakai kalau tidak ada foto)</label><input type="text" class="b-icon" value="${b.icon || "📰"}"></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;"><label>Judul</label><input type="text" class="b-title" value="${b.title || ""}"></div>
+      <div class="field" style="margin-bottom:10px;"><label>Ringkasan</label><textarea class="b-excerpt">${b.excerpt || ""}</textarea></div>
+      <div class="field"><label>Path Foto (kosongkan kalau pakai ikon), cth: ../assets/image/nama-file.jpg</label><input type="text" class="b-gambar" value="${b.gambar || ""}"></div>
+    `;
+    row.querySelector(".row-remove").addEventListener("click", () => row.remove());
+    container.appendChild(row);
+  }
+  function collectBeritaRows() {
+    const rows = document.querySelectorAll("#rows-berita .berita-card-edit");
+    const out = [];
+    rows.forEach(r => {
+      const title = r.querySelector(".b-title").value.trim();
+      if (!title) return;
+      out.push({
+        tag: r.querySelector(".b-tag").value.trim(),
+        title: title,
+        excerpt: r.querySelector(".b-excerpt").value.trim(),
+        date: r.querySelector(".b-date").value.trim(),
+        icon: r.querySelector(".b-icon").value.trim() || "📰",
+        gambar: r.querySelector(".b-gambar").value.trim(),
+      });
+    });
+    return out;
+  }
+
+  function populateForms() {
+    document.getElementById("f-total").value = DATA_DEMOGRAFI.totalPenduduk || 0;
+    document.getElementById("f-lk").value = DATA_DEMOGRAFI.lakiLaki || 0;
+    document.getElementById("f-pr").value = DATA_DEMOGRAFI.perempuan || 0;
+    document.getElementById("f-umkm").value = DATA_DEMOGRAFI.jumlahUMKM || 0;
+    renderKVRows("rows-usia", DATA_DEMOGRAFI.usia, "kelompok");
+    renderKVRows("rows-mp", DATA_DEMOGRAFI.mataPencaharian, "label");
+    renderKVRows("rows-agama", DATA_DEMOGRAFI.agama, "label");
+    renderKVRows("rows-alamat", DATA_DEMOGRAFI.alamat, "label");
+    renderBumdesRows(DATA_BUMDES);
+    renderBeritaRows(DATA_BERITA);
+  }
+
+  function loadFormsWhenReady() {
+    if (window.__siteDataReady) { populateForms(); }
+    else { window.addEventListener("site-data-ready", populateForms, { once: true }); }
+  }
+
+  document.querySelectorAll(".btn-add").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const kind = btn.dataset.add;
+      if (kind === "usia") addKVRow("rows-usia", "", "");
+      else if (kind === "mp") addKVRow("rows-mp", "", "");
+      else if (kind === "agama") addKVRow("rows-agama", "", "");
+      else if (kind === "alamat") addKVRow("rows-alamat", "", "");
+      else if (kind === "bumdes") addBumdesRow("🏪", "", "");
+      else if (kind === "berita") addBeritaRow({});
+    });
+  });
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  async function saveKey(key, value, label) {
+    const btns = document.querySelectorAll(".btn-save");
+    btns.forEach(b => b.disabled = true);
+    showStatus("Menyimpan...", "loading");
+    try {
+      const result = await postToScript({ token: ADMIN_TOKEN, key: key, value: value });
+      if (result.ok) {
+        showStatus(label + " tersimpan & langsung tersinkron ke situs.", "ok");
+      } else {
+        showStatus("Gagal menyimpan: " + (result.error || "kode admin salah/kedaluwarsa."), "err");
+        if (result.error && result.error.toLowerCase().includes("token")) doLogout();
+      }
+    } catch (e) {
+      showStatus("Gagal menyimpan (koneksi): " + e.message, "err");
+    }
+    btns.forEach(b => b.disabled = false);
+  }
+
+  document.getElementById("save-statistik").addEventListener("click", () => {
+    const demografi = {
+      totalPenduduk: parseInt(document.getElementById("f-total").value, 10) || 0,
+      lakiLaki: parseInt(document.getElementById("f-lk").value, 10) || 0,
+      perempuan: parseInt(document.getElementById("f-pr").value, 10) || 0,
+      jumlahUMKM: parseInt(document.getElementById("f-umkm").value, 10) || 0,
+      usia: collectKVRows("rows-usia", "kelompok"),
+      mataPencaharian: collectKVRows("rows-mp", "label"),
+      agama: collectKVRows("rows-agama", "label"),
+      alamat: collectKVRows("rows-alamat", "label"),
+    };
+    saveKey("demografi", demografi, "Data statistik");
+  });
+
+  document.getElementById("save-bumdes").addEventListener("click", () => {
+    saveKey("bumdes", collectBumdesRows(), "Data BUMDes");
+  });
+
+  document.getElementById("save-berita").addEventListener("click", () => {
+    saveKey("berita", collectBeritaRows(), "Data berita");
+  });
+
+  function doLogout() {
+    ADMIN_TOKEN = "";
+    sessionStorage.removeItem("admin_token");
+    document.getElementById("login-screen").style.display = "flex";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("login-password").value = "";
+  }
+
+  async function tryLogin(token) {
+    const btn = document.getElementById("login-btn");
+    const errEl = document.getElementById("login-error");
+    errEl.textContent = "";
+
+    if (typeof isDataConfigReady !== "function" || !isDataConfigReady()) {
+      errEl.textContent = "Apps Script belum disetel di data-config.js. Lihat PANDUAN_ADMIN.md.";
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Memeriksa...";
+    try {
+      const result = await postToScript({ action: "verify", token: token });
+      if (result.ok) {
+        ADMIN_TOKEN = token;
+        sessionStorage.setItem("admin_token", token);
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadFormsWhenReady();
+      } else {
+        errEl.textContent = "Kode admin salah.";
+      }
+    } catch (e) {
+      errEl.textContent = "Tidak bisa menghubungi server: " + e.message;
+    }
+    btn.disabled = false;
+    btn.textContent = "Masuk";
+  }
+
+  document.getElementById("login-btn").addEventListener("click", () => {
+    const token = document.getElementById("login-password").value;
+    if (token) tryLogin(token);
+  });
+  document.getElementById("login-password").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("login-btn").click();
+  });
+  document.getElementById("logout-btn").addEventListener("click", doLogout);
+
+  if (ADMIN_TOKEN) tryLogin(ADMIN_TOKEN);
+});
+</script>
+</body>
+</html>
