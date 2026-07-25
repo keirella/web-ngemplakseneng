@@ -76,33 +76,50 @@ const DEFAULT_DATA_BUMDES = [
 // 2. Isi properti "gambar" dengan path relatif dari folder pages/, jadi diawali "../assets/image/..."
 //    misal: gambar: "../assets/image/kerja-bakti-1.jpg"
 // 3. Kalau "gambar" tidak diisi (dihapus/kosong), kartu akan otomatis pakai ikon emoji di "icon"
+// 4. Untuk kegiatan RUTIN (bukan berita sekali kejadian), isi "date" dengan jadwalnya,
+//    misal "Setiap Jumat, 15.30–selesai" — field ini bebas teks, tidak harus tanggal pasti.
 // Kegiatan boleh sebanyak apapun — tinggal tambah objek baru { ... } di dalam array ini.
 // =========================================================
 const DEFAULT_DATA_BERITA = [
-  // TODO: ganti dengan berita asli desa. Tambah objek baru untuk berita baru.
   {
-    tag: "Pengumuman",
-    title: "Contoh: Jadwal Pelayanan Administrasi Bulan Ini",
-    excerpt: "Ini contoh ringkasan berita. Ganti judul, tanggal, dan isi ringkasan ini dengan pengumuman resmi dari kantor desa.",
-    date: "1 Januari 2026",
-    icon: "📢",
-    gambar: "", // contoh: "../assets/image/pengumuman-1.jpg"
+    tag: "Keagamaan",
+    title: "TPA Masjid Al-Ma'un",
+    excerpt: "Kegiatan mengaji rutin bagi anak-anak setiap Senin–Jumat, dilanjutkan latihan hadroh setiap Sabtu.",
+    date: "Senin–Jumat & Sabtu, 15.30–16.30",
+    icon: "🕌",
+    gambar: "",
   },
   {
-    tag: "Kegiatan",
-    title: "Contoh: Kerja Bakti Bersih Desa",
-    excerpt: "Ini contoh ringkasan berita kegiatan warga. Ganti dengan laporan kegiatan asli beserta tanggal pelaksanaannya.",
-    date: "15 Januari 2026",
+    tag: "Kesehatan",
+    title: "Posyandu Rutin Tiap RW",
+    excerpt: "Pelayanan kesehatan ibu dan anak rutin setiap bulan, bergiliran di tiap RW 01 sampai RW 12.",
+    date: "Rutin tiap bulan, 09.00–11.30",
+    icon: "🩺",
+    gambar: "",
+  },
+  {
+    tag: "Kerja Bakti",
+    title: "Kerja Bakti RW 07 & RW 08",
+    excerpt: "Kerja bakti bersih lingkungan bersama warga RW 07 dan RW 08, dilaksanakan rutin setiap minggu.",
+    date: "Setiap Minggu, mulai 05.30",
     icon: "🧹",
-    gambar: "", // contoh: "../assets/image/kerja-bakti-1.jpg"
+    gambar: "",
   },
   {
-    tag: "Pertanian",
-    title: "Contoh: Pembagian Bibit untuk Kelompok Tani",
-    excerpt: "Ini contoh ringkasan berita seputar program pertanian atau Gapoktan. Ganti dengan informasi resmi terbaru.",
-    date: "3 Februari 2026",
-    icon: "🌾",
-    gambar: "", // contoh: "../assets/image/bibit-tani-1.jpg"
+    tag: "Kerja Bakti",
+    title: "Kerja Bakti RW 06",
+    excerpt: "Kerja bakti bersih lingkungan bersama warga RW 06, dilaksanakan rutin setiap pekan.",
+    date: "Setiap Sabtu, 14.00–15.00",
+    icon: "🧹",
+    gambar: "",
+  },
+  {
+    tag: "Olahraga",
+    title: "Senam Sore di Balai Desa",
+    excerpt: "Senam sore bersama warga bertempat di Balai Desa. Terbuka untuk umum dengan HTM Rp5.000.",
+    date: "Setiap Jumat, 15.30–selesai",
+    icon: "🤸",
+    gambar: "",
   },
 ];
 
