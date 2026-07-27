@@ -159,9 +159,19 @@ document.addEventListener("DOMContentLoaded", function () {
     renderBeritaRows(DATA_BERITA);
   }
 
-  function loadFormsWhenReady() {
-    if (window.__siteDataReady) { populateForms(); }
-    else { window.addEventListener("site-data-ready", populateForms, { once: true }); }
+  async function loadFormsWhenReady() {
+    try {
+      const res = await fetch(APPS_SCRIPT_URL);
+      const data = await res.json();
+      window.DATA_DEMOGRAFI = data.demografi || {};
+      window.DATA_BUMDES = data.bumdes || [];
+      window.DATA_BERITA = data.berita || [];
+      populateForms();
+    } catch (e) {
+      console.error("Gagal mengambil data dari Apps Script:", e);
+      if (window.__siteDataReady) { populateForms(); }
+      else { window.addEventListener("site-data-ready", populateForms, { once: true }); }
+    }
   }
 
   /* ---------- Tombol tambah baris ---------- */
